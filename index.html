@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+    const fs = require("fs");
+    const path = require("path");
+
+      const walk = function(p, callback){
+            var results = [];
+
+            fs.readdir(p, function (err, files) {
+              if (err) throw err;
+
+              var pending = files.length;
+              if (!pending) return callback(null, results); //全てのファイル取得が終わったらコールバックを呼び出す
+
+              files.map(function (file) { //リスト取得
+                return path.join(p, file);
+              }).filter(function (file) {
+                if(fs.statSync(file).isDirectory()) walk(file, function(err, res) { //ディレクトリだったら再帰
+                  results.push({name:path.basename(file), children:res}); //子ディレクトリをchildrenインデックス配下に保存
+                  if (!--pending) callback(null, results);
+                 });
+                return fs.statSync(file).isFile();
+              }).forEach(function (file) { //ファイル名を保存
+                var stat = fs.statSync(file);
+                results.push({file:path.basename(file), size:stat.size});
+                if (!--pending) callback(null, results);
+              });
+
+            });
+      }
+
+      const getGulp = () =>{
+          var gulp = require("gulp");
+
+          const requireDir = require('require-dir');
+          requireDir('../tasks', { recurse: true });
+
+          return gulp;
+      }
+      const peke = (a)=>{
+        console.log(a);
+      }
+
+      const writeDiv = (div,content,type) =>{
+          var tempDiv = document.querySelector("#" + div);
+
+          tempDiv.style.color = (type === "error")?"red":"black";
+          tempDiv.value = content;
+      }
+      const getPath = ()=>{
+          const tempDiv = document.querySelector("#inputGetPath");
+          return tempDiv.value;
+      }
+    </script>
+  </head>
+  <body>
+    <div id="megroApps" ></div>
+  </body>
+</html>
+
+<!--           const execFile = require('child_process').execFile;
+          const child = execFile('C:/Users/takayuki/AppData/Roaming/npm/gulp.cmd', ['test'], (error, stdout, stderr) => {
+              // if (error) {
+              //   throw error;
+              // }
+              writeDiv("divResult",stdout);
+              peke(stdout)
+          }); -->
