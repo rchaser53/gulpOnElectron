@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "target": "es6",
+    "jsx": "react",
+    "module":"es2015",
+    "experimentalDecorators": true
+  },
+  "compileOnSave":false,
+  "files": [
+    "src/declare.ts",
+    "typings/tsd.d.ts",
+    "typings/bundle.d.ts"
+  ]
+}
