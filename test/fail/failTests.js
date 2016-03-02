@@ -2,7 +2,7 @@ const expect = require('expect');
 
 describe('actions application', () => {
 	it('testA', () => {
-		expect(true).toEqual(false);
+		expect(true).toEqual(true);
 	});
 
 	it('testB', () => {

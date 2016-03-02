@@ -8,7 +8,7 @@ describe('actions application', () => {
 	it('testB', () => {
 		expect(true).toEqual(true);
 	});
-
+	
 	it('testC', () => {
 		expect(true).toEqual(true);
 	});
