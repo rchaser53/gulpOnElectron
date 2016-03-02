@@ -8,8 +8,6 @@ const getTime = require("./getTime");
 gulp.task("tsCompile",()=>{
     return gulp.src(['./typings/bundle.d.ts','src/**/*ts','src/**/*tsx'])
     	.pipe(plumber())
-        .pipe(replace(".ts';", "';"))
-        .pipe(replace(".ts');", "');"))
         .pipe(ts(project)).js
         .pipe(gulp.dest('./build'));
 });

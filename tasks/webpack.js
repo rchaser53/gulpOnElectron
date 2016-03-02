@@ -8,7 +8,4 @@ gulp.task('webpack',(cb)=>{
 		.pipe(plumber())
 	  	.pipe(webpack( require('../webpack.production.config.js') ))
 	  	.pipe(gulp.dest('dist/'));
-		// .on("end",()=>{
-		// 	writeDiv("divTitle",`[${getTime()}] webpack done.`)
-		// });
 });

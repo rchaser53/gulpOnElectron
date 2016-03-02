@@ -40,14 +40,6 @@ const TestReporter = function(runner){
 }
 
 gulp.task('test', () => {
-
-    // var temp = new Buffer("abcde");
-    // var temp2 = temp.slice(3)
-    // console.log(temp2.toString());
-
-    console.log(gulp.tasks)
-    console.log(process.argv)
-
     return gulp.src('test/**/*.js', {read: false})
     			.pipe(plumber())
 				.pipe(mocha({
