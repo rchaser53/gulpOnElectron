@@ -1,5 +1,6 @@
 import * as React from "react";
-import testStdout from "testStdout";
+import test from "testStdout";
+const {start,stop} = test;
 
 const tmpStyle= {
 	width:150,
@@ -18,23 +19,9 @@ export class App extends React.Component{
     this.state.stdout = [];
     this.state.stderr = [];
 
+    this.state.processes = {};
     this.state.directories = {};
 	}
-  doTask(task){
-    let messeageArray = this.state.messeage;
-
-    let tempTasks = this.props.getGulp().tasks
-
-    try{
-      tempTasks[task.name].fn();
-
-    } catch(error){
-      messeageArray.push({type:"error",
-                          messeage:(error)});
-    }
-
-    tempTasks = null;
-  }
   makeTasks(){
     const tasks = this.state.tasks;
 
@@ -64,30 +51,17 @@ export class App extends React.Component{
         this.setState({directories:results})
     });
   }
-  doTask(key){
+  doTask(key){    
     this.setState({stdout:[],stderr:[]});
+    const ls = start(key,"./src",true);
+    let tempObj = this.state.processes;
+    tempObj[key] = ls;
 
-    const ls = testStdout(key);
+    this.setState({processes:tempObj});
 
     ls.stdout.on('data', (data) => {
-
       let tempArray = this.state.stdout;
-      var tempPos = data.indexOf("\n");
-
-      // if(tempPos === -1){
-          tempArray.push(data.toString());
-          // return;
-      // }
-
-      // var leftStrBefore = data.slice(tempPos);
-      // var leftStrAfter = data.slice(0,tempPos);
-      // while(tempPos > 0){
-      //   tempArray.push(leftStrBefore.toString());
-      //   tempPos = leftStrAfter.indexOf("\n");
-      //   leftStrBefore = leftStrAfter.slice(tempPos);
-      //   leftStrAfter = leftStrAfter.slice(0,tempPos);
-      // }
-      // tempArray.push(leftStrBefore.toString());
+      tempArray.push(data.toString());
 
       this.setState({stdout:tempArray});
     });
@@ -99,9 +73,8 @@ export class App extends React.Component{
       this.setState({stderr:tempArray});
     });
 
-    ls.on('close', (code) => {
-      // this.refs.divOther.textContent += `child process exited with code ${code}`
-      // console.log(`child process exited with code ${code}`);
+    ls.on('close', (message,socket) => {
+      console.log(message);
     });
   }
   makeDirectories(){
@@ -123,6 +96,12 @@ export class App extends React.Component{
   setPath(key){
     this.refs.inputPathRef.value += "/" + this.refs[key].textContent;
   }
+  killProcess(){
+    const processes = this.state.processes;
+    Object.keys(processes).forEach((key)=>{
+        processes[key].send("a");
+    });
+  }
 	render(){
 		return (<div>
                 <div style={{display:"flex"}}>
@@ -133,6 +112,7 @@ export class App extends React.Component{
                     <div>{this.makeTasks()}</div>
                     <div>{this.makeDirectories()}</div>
                 </div>
+                <button onClick={()=>{this.killProcess()}} >kill</button>
                 {this.makeMessageRow(this.state.stdout,"black")}
                 {this.makeMessageRow(this.state.stderr,"red")}
             </div>);
