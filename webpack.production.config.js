@@ -14,13 +14,13 @@ module.exports = {
     filename: 'build/bundle.js'
   },
   plugins: [
-    // new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new HtmlWebpackPlugin({
       template: 'index.html',
       inject: 'body',
       filename: 'index.html'
     }),
-    // new ExtractTextPlugin('css/[name]-[hash].min.css'),
+    new ExtractTextPlugin('css/[name]-[hash].min.css'),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
     })
