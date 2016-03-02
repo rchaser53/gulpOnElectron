@@ -5,6 +5,7 @@
     "noLib": false,
     "target": "es6",
     "jsx": "react",
+    "module":"es2015",
     "experimentalDecorators": true
   },
   "compileOnSave":false,
